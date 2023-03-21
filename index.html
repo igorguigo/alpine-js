@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpine  JS</title>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        [x-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto mt-6 max-w-sm">
+        <h1 class="text-5xl mb-4">Alpine.js Demo</h1>
+        <!-- x-data alpina component -->
+        <div 
+            x-data="{
+                open: false, 
+                name: 'Brad',
+                search: 'teste@',
+                posts: [
+                    {title: 'Post One'},
+                    {title: 'Post Two'},
+                    {title: 'Post Three'},
+                    {title: 'Post Four'},
+                ]
+            }">
+            <!-- x-on & x-bind-->
+            <button 
+                x-on:click="open = !open" 
+                x-bind:class="open ? 'bg-blue-800' : 'bg-slate-700'"
+                class="text-white px-4 py-2 rounded-xl"
+            >
+                Toggle
+            </button>
+            <!-- x-show -->
+            <div x-show="open" x-transition x-cloak>
+                <p class="bg-gray-200 p-4 my-6 rounded">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque eos officia similique ratione nesciunt. Illo mollitia itaque, impedit neque inventore quam, voluptatum quia voluptate voluptates dolores veritatis incidunt hic officia?
+                </p>
+            </div>
+            <!-- x-text -->
+            <div class="my-4">
+                The value of name is <span x-text="name" class="font-bold"></span>
+            </div>
+            <!-- x-effect -->
+            <div x-effect="console.log(open)"></div>
+
+            <!-- x-model -->
+             <input 
+                x-model="search"
+                type="text" 
+                class="border p-2 w-full mb-2 mt-6" 
+                placeholder="Search for something..."
+            />
+            <p class="font-bold">Searching for:</p>
+            <span x-text="search"></span>
+            <!-- x-if -->
+             <template x-if="open">
+                <div x-bind:class="open ? 'bg-blue-800' : 'bg-slate-700'" class="p-2 mt-8">Template based on a condition</div>
+             </template>
+            <!-- x-for -->
+            <h3 class="text-2xl mt-6 mb-3 font-bold">Posts</h3>
+            <template x-for="post in posts">
+                <div x-text="post.title"></div>
+            </template>
+            <button @click="posts.push({title: 'New Post'})" class="bg-blue-800 text-white px-4 py-2 rounded-lg mt-4">
+                Add Post
+            </button>
+            <div class="my-6">
+                <!-- x-ref -->
+                <div x-ref="text">Hello World</div>
+                <button @click="$refs.text.remove()" class="bg-black text-white p-2 rounded">Click</button>
+            </div>
+            <!-- x-html -->
+            <div x-html="(await axios.get('./partial.html')).data">...</div>
+            <!-- $el -->
+            <button 
+                x-on:click="$el.innerHTML = 'Hello World'"
+                class="mt-4 p-4 border"
+            >
+                Replace Text
+            </button>
+            <!-- x-init & $watch -->
+            <div x-init="$watch('posts', value => console.log(value))"></div>
+        </div>
+    </div>
+    <div x-data="{
+        cards: [
+            {name: 'Erin Linford', job: 'Product Enginner', photo: '/img/user1.png'},
+            {name: 'Jacob Anden', job: 'Computer Enginner', photo: '/img/user2.png'},
+            {name: 'Erin Linford', job: 'Marketing Manager', photo: '/img/user3.png'},
+        ]
+    }">  
+    <template x-for="post in posts">
+        <div x-text="post.title"></div>
+    </template>
+    <template x-for="card in cards">
+        <div class="py-8 px-8 max-w-sm mx-auto bg-white rounded-xl shadow-lg space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6 mb-4">
+            <img :src="card.photo" class="block mx-auto h-24 rounded-full sm:mx-0 sm:shrink-0" alt="Woman's Face">
+            <div class="text-center space-y-2 sm:text-left">
+              <div class="space-y-0.5">
+                <p x-text="card.name" class="text-lg text-black font-semibold">
+                
+                </p>
+                <p x-text="card.job" class="text-slate-500 font-medium">
+                
+                </p>
+              </div>
+              <button class="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">Message</button>
+            </div>
+          </div>
+    </template>
+    <button @click="cards.push({name: 'Igor Tonelli', job: 'Front-end Developer', photo: '/img/user1.png'})" class="bg-blue-800 text-white px-4 py-2 rounded-lg mt-4 text-center flex jutify-center mx-auto mb-4">
+        Add Card
+    </button>
+    <!-- x-model -->
+    <input 
+        x-model="cards[0].name"
+        type="text" 
+        class="border p-2 w-full mb-2 mt-6 mx-auto flex justify-center max-w-xs mb-4" 
+        placeholder="Search for something..."
+    />
+    <p class="font-bold mx-auto flex justify-center">Searching for:</p>
+    <span class="mx-auto flex justify-center mb-4" x-text="cards[0].name"></span>
+    </div>
+</body>
+</html>
